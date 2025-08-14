@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoCARE Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --physiogo-blue: #0619A3;
+            --light-gray: #F6F7FB;
+            --success-green: #2ECC71;
+            --error-red: #E74C3C;
+            --text-dark: #333;
+            --text-gray: #666;
+            --border-light: #E5E7EB;
+        }
+
+        body {
+            font-family: 'Inter', 'Open Sans', Arial, sans-serif;
+            background: var(--light-gray);
+            color: var(--text-dark);
+            padding-bottom: 70px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--physiogo-blue);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .wallet-balance {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Icons */
+        .icon {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .icon-small {
+            width: 16px;
+            height: 16px;
+        }
+
+        .icon-large {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Container */
+        .container {
+            padding: 20px 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Patient Selector */
+        .patient-selector {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .patient-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--physiogo-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .patient-info h3 {
+            color: var(--text-dark);
+            margin-bottom: 3px;
+        }
+
+        .patient-info span {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        .switch-patient {
+            margin-left: auto;
+            color: var(--physiogo-blue);
+            cursor: pointer;
+        }
+
+        /* Welcome Alert */
+        .alert-info {
+            background: #E8F0FF;
+            border-left: 4px solid var(--physiogo-blue);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .alert-info .alert-icon {
+            color: var(--physiogo-blue);
+            flex-shrink: 0;
+        }
+
+        .alert-content h4 {
+            color: var(--physiogo-blue);
+            margin-bottom: 5px;
+        }
+
+        /* Session Card */
+        .session-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .session-header {
+            background: var(--physiogo-blue);
+            color: white;
+            padding: 15px;
+        }
+
+        .session-header h3 {
+            margin-bottom: 5px;
+        }
+
+        .session-body {
+            padding: 20px;
+        }
+
+        .session-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .caregiver-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--physiogo-blue);
+        }
+
+        .session-details h4 {
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .session-details p {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: var(--physiogo-blue);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .status-badge.ongoing {
+            background: var(--success-green);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--physiogo-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #051480;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(6, 25, 163, 0.3);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--physiogo-blue);
+            border: 2px solid var(--physiogo-blue);
+        }
+
+        .btn-outline:hover {
+            background: var(--physiogo-blue);
+            color: white;
+        }
+
+        .btn-outline:hover svg {
+            fill: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-gray);
+            border: 2px solid var(--border-light);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-gray);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        /* Timeline */
+        .timeline {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .timeline h3 {
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 15px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .timeline-item:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 40px;
+            width: 2px;
+            height: calc(100% - 20px);
+            background: var(--physiogo-blue);
+            opacity: 0.3;
+        }
+
+        .timeline-dot {
+            width: 40px;
+            height: 40px;
+            background: var(--physiogo-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: #E8F0FF;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .timeline-time {
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-bottom: 5px;
+        }
+
+        .timeline-text {
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        /* Deposit Card */
+        .deposit-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .deposit-card h3 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--physiogo-blue);
+            margin: 10px 0 20px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 5px;
+            cursor: pointer;
+            color: var(--text-gray);
+            transition: color 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--physiogo-blue);
+        }
+
+        .nav-item.active svg {
+            fill: var(--physiogo-blue);
+        }
+
+        .nav-item:hover {
+            color: var(--physiogo-blue);
+        }
+
+        .nav-item:hover svg {
+            fill: var(--physiogo-blue);
+        }
+
+        .nav-icon {
+            margin-bottom: 5px;
+        }
+
+        .nav-label {
+            font-size: 12px;
+        }
+
+        /* Floating Help Button */
+        .help-float {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--physiogo-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(6, 25, 163, 0.3);
+            transition: transform 0.3s ease;
+            z-index: 99;
+        }
+
+        .help-float:hover {
+            transform: scale(1.1);
+        }
+
+        /* Past Sessions */
+        .past-sessions {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .past-sessions h3 {
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .session-item {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .session-item:last-child {
+            border-bottom: none;
+        }
+
+        .session-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .session-date {
+            background: var(--physiogo-blue);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .session-item-details {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .link-btn {
+            color: var(--physiogo-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .link-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 720px;
+                padding: 30px;
+            }
+
+            .btn-group {
+                justify-content: center;
+            }
+
+            .btn-group .btn {
+                flex: 0 0 auto;
+                min-width: 150px;
+            }
+        }
+
+        /* Animation */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .session-card, .timeline, .deposit-card, .past-sessions {
+            animation: slideIn 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">GoCARE</div>
+        <div class="header-right">
+            <div class="wallet-balance">
+                <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M21 18v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1h-9a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9zm-9-2h10V8H12v8zm4-2.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                </svg>
+                RM 850.00
+            </div>
+            <button class="menu-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Patient Selector -->
+        <div class="patient-selector">
+            <div class="patient-avatar">MK</div>
+            <div class="patient-info">
+                <h3>Mak Kiah</h3>
+                <span>Ibu • 78 tahun</span>
+            </div>
+            <div class="switch-patient">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 10l5 5 5-5z"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Welcome Alert -->
+        <div class="alert-info">
+            <svg class="icon alert-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+            <div class="alert-content">
+                <h4>Selamat Datang!</h4>
+                <p>Sila semak perjanjian penjagaan kami sebelum sesi pertama.</p>
+            </div>
+        </div>
+
+        <!-- Next Session Card -->
+        <div class="session-card">
+            <div class="session-header">
+                <h3>Sesi Seterusnya</h3>
+                <p>Isnin, 19 Ogos 2025</p>
+            </div>
+            <div class="session-body">
+                <div class="session-info">
+                    <div class="caregiver-avatar">
+                        <svg class="icon-large" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    <div class="session-details">
+                        <h4>Kak Siti Aminah</h4>
+                        <p>
+                            <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                            </svg>
+                            9:00 AM - 1:00 PM
+                        </p>
+                        <p>
+                            <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            4.8 (127 ulasan)
+                        </p>
+                        <span class="status-badge">Disahkan</span>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline">
+                        <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        Tukar Penjaga
+                    </button>
+                    <button class="btn btn-secondary">
+                        <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                        </svg>
+                        Jadual Semula
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ongoing Session Timeline -->
+        <div class="timeline">
+            <h3>
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+                </svg>
+                Kemaskini Sesi Semasa
+            </h3>
+            <div class="timeline-item">
+                <div class="timeline-dot">
+                    <svg class="icon-small" viewBox="0 0 24 24" fill="white">
+                        <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                    </svg>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-time">8:45 AM</div>
+                    <div class="timeline-text">Penjaga dalam perjalanan</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">
+                    <svg class="icon-small" viewBox="0 0 24 24" fill="white">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-time">9:00 AM</div>
+                    <div class="timeline-text">Penjaga telah tiba</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">
+                    <svg class="icon-small" viewBox="0 0 24 24" fill="white">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/>
+                    </svg>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-time">10:00 AM</div>
+                    <div class="timeline-text">Ubat telah diberikan • Sarapan selesai</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">
+                    <svg class="icon-small" viewBox="0 0 24 24" fill="white">
+                        <path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96z"/>
+                    </svg>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-time">11:00 AM</div>
+                    <div class="timeline-text">Mandi & berpakaian selesai</div>
+                </div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 15px;">
+                <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                </svg>
+                Hubungi Penjaga
+            </button>
+        </div>
+
+        <!-- Deposit Card -->
+        <div class="deposit-card">
+            <h3>
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M21 18v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1h-9a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9zm-9-2h10V8H12v8zm4-2.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                </svg>
+                Baki Deposit Anda
+            </h3>
+            <div class="balance-amount">RM 850.00</div>
+            <button class="btn btn-primary">
+                <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
+                Tambah Deposit
+            </button>
+        </div>
+
+        <!-- Past Sessions -->
+        <div class="past-sessions">
+            <h3>
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+                </svg>
+                Sesi Lepas
+            </h3>
+            <div class="session-item">
+                <div class="session-item-header">
+                    <span class="session-date">15 Ogos 2025</span>
+                    <span class="status-badge ongoing">Selesai</span>
+                </div>
+                <div class="session-item-details">
+                    Kak Siti Aminah • 4 jam • Penjagaan Harian
+                </div>
+                <div>
+                    <a href="#" class="link-btn">
+                        <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                        Lihat Butiran
+                    </a> • 
+                    <a href="#" class="link-btn">
+                        <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        Beri Penilaian
+                    </a>
+                </div>
+            </div>
+            <div class="session-item">
+                <div class="session-item-header">
+                    <span class="session-date">12 Ogos 2025</span>
+                    <span class="status-badge ongoing">Selesai</span>
+                </div>
+                <div class="session-item-details">
+                    Kak Fatimah • 6 jam • Penjagaan Harian
+                </div>
+                <div>
+                    <a href="#" class="link-btn">
+                        <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                        Lihat Butiran
+                    </a> • 
+                    <a href="#" class="link-btn">
+                        <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        Beri Penilaian
+                    </a>
+                </div>
+            </div>
+            <div class="session-item">
+                <div class="session-item-header">
+                    <span class="session-date">8 Ogos 2025</span>
+                    <span class="status-badge ongoing">Selesai</span>
+                </div>
+                <div class="session-item-details">
+                    Kak Siti Aminah • 4 jam • Penjagaan Harian
+                </div>
+                <div>
+                    <a href="#" class="link-btn">
+                        <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                        Lihat Butiran
+                    </a> • 
+                    <span style="color: var(--text-gray); font-size: 14px;">
+                        Dinilai 
+                        <svg class="icon-small" viewBox="0 0 24 24" fill="#FFD700" style="vertical-align: middle;">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <svg class="icon-small" viewBox="0 0 24 24" fill="#FFD700" style="vertical-align: middle;">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <svg class="icon-small" viewBox="0 0 24 24" fill="#FFD700" style="vertical-align: middle;">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <svg class="icon-small" viewBox="0 0 24 24" fill="#FFD700" style="vertical-align: middle;">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <svg class="icon-small" viewBox="0 0 24 24" fill="#FFD700" style="vertical-align: middle;">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Help Button -->
+    <div class="help-float">
+        <svg class="icon" viewBox="0 0 24 24" fill="white">
+            <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+        </svg>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-item active">
+            <div class="nav-icon">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+            </div>
+            <div class="nav-label">Utama</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg class="icon" viewBox="0 0 24 24" fill="#666">
+                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                </svg>
+            </div>
+            <div class="nav-label">Tempah</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg class="icon" viewBox="0 0 24 24" fill="#666">
+                    <path d="M21 18v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1h-9a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9zm-9-2h10V8H12v8zm4-2.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                </svg>
+            </div>
+            <div class="nav-label">Deposit</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg class="icon" viewBox="0 0 24 24" fill="#666">
+                    <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+                </svg>
+            </div>
+            <div class="nav-label">Bantuan</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg class="icon" viewBox="0 0 24 24" fill="#666">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
+            <div class="nav-label">Profil</div>
+        </div>
+    </nav>
+</body>
+</html>
