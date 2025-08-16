@@ -12,13 +12,16 @@
         }
 
         :root {
-            --physiogo-blue: #0619A3;
-            --light-gray: #F6F7FB;
-            --success-green: #2ECC71;
-            --error-red: #E74C3C;
+            --physiogo-blue: #E91E63;
+            --physiogo-dark: #C2185B;
+            --physiogo-light: #F8BBD9;
+            --light-gray: #FDF2F8;
+            --success-green: #4CAF50;
+            --error-red: #F44336;
             --text-dark: #333;
             --text-gray: #666;
-            --border-light: #E5E7EB;
+            --border-light: #F8BBD9;
+            --pink-accent: #FCE4EC;
         }
 
         body {
@@ -31,7 +34,7 @@
 
         /* Header */
         .header {
-            background: var(--physiogo-blue);
+            background: linear-gradient(135deg, var(--physiogo-blue) 0%, var(--physiogo-dark) 100%);
             color: white;
             padding: 15px;
             display: flex;
@@ -40,7 +43,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(233, 30, 99, 0.3);
         }
 
         .logo {
@@ -62,6 +65,7 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            backdrop-filter: blur(10px);
         }
 
         .menu-btn {
@@ -104,20 +108,21 @@
         /* Patient Selector */
         .patient-selector {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 15px;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(233, 30, 99, 0.1);
+            border: 2px solid var(--pink-accent);
         }
 
         .patient-avatar {
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: var(--physiogo-blue);
+            background: linear-gradient(135deg, var(--physiogo-blue) 0%, var(--physiogo-dark) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -144,11 +149,11 @@
 
         /* Welcome Alert */
         .alert-info {
-            background: #E8F0FF;
+            background: var(--pink-accent);
             border-left: 4px solid var(--physiogo-blue);
             padding: 15px;
             margin-bottom: 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             display: flex;
             align-items: flex-start;
             gap: 12px;
@@ -167,14 +172,15 @@
         /* Session Card */
         .session-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
             margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 30px rgba(233, 30, 99, 0.15);
+            border: 2px solid var(--pink-accent);
         }
 
         .session-header {
-            background: var(--physiogo-blue);
+            background: linear-gradient(135deg, var(--physiogo-blue) 0%, var(--physiogo-dark) 100%);
             color: white;
             padding: 15px;
         }
@@ -198,7 +204,7 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: var(--light-gray);
+            background: var(--pink-accent);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -237,7 +243,7 @@
         /* Buttons */
         .btn {
             padding: 12px 24px;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
@@ -251,14 +257,14 @@
         }
 
         .btn-primary {
-            background: var(--physiogo-blue);
+            background: linear-gradient(135deg, var(--physiogo-blue) 0%, var(--physiogo-dark) 100%);
             color: white;
         }
 
         .btn-primary:hover {
-            background: #051480;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(6, 25, 163, 0.3);
+            background: linear-gradient(135deg, var(--physiogo-dark) 0%, #AD1457 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
         }
 
         .btn-outline {
@@ -270,6 +276,8 @@
         .btn-outline:hover {
             background: var(--physiogo-blue);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.3);
         }
 
         .btn-outline:hover svg {
@@ -283,7 +291,9 @@
         }
 
         .btn-secondary:hover {
-            border-color: var(--text-gray);
+            border-color: var(--physiogo-blue);
+            color: var(--physiogo-blue);
+            transform: translateY(-2px);
         }
 
         .btn-group {
@@ -299,10 +309,11 @@
         /* Timeline */
         .timeline {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 30px rgba(233, 30, 99, 0.15);
+            border: 2px solid var(--pink-accent);
         }
 
         .timeline h3 {
@@ -327,27 +338,28 @@
             top: 40px;
             width: 2px;
             height: calc(100% - 20px);
-            background: var(--physiogo-blue);
-            opacity: 0.3;
+            background: linear-gradient(180deg, var(--physiogo-blue) 0%, var(--physiogo-light) 100%);
+            opacity: 0.6;
         }
 
         .timeline-dot {
             width: 40px;
             height: 40px;
-            background: var(--physiogo-blue);
+            background: linear-gradient(135deg, var(--physiogo-blue) 0%, var(--physiogo-dark) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
         }
 
         .timeline-content {
             flex: 1;
-            background: #E8F0FF;
+            background: var(--pink-accent);
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 12px;
         }
 
         .timeline-time {
@@ -364,11 +376,12 @@
         /* Deposit Card */
         .deposit-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 20px;
             margin-bottom: 20px;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 30px rgba(233, 30, 99, 0.15);
+            border: 2px solid var(--pink-accent);
         }
 
         .deposit-card h3 {
@@ -382,7 +395,10 @@
         .balance-amount {
             font-size: 32px;
             font-weight: bold;
-            color: var(--physiogo-blue);
+            background: linear-gradient(135deg, var(--physiogo-blue) 0%, var(--physiogo-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin: 10px 0 20px;
         }
 
@@ -393,11 +409,12 @@
             left: 0;
             right: 0;
             background: white;
-            border-top: 1px solid var(--border-light);
+            border-top: 2px solid var(--pink-accent);
             display: flex;
             justify-content: space-around;
             padding: 10px 0;
             z-index: 100;
+            box-shadow: 0 -4px 20px rgba(233, 30, 99, 0.1);
         }
 
         .nav-item {
@@ -407,11 +424,13 @@
             padding: 5px;
             cursor: pointer;
             color: var(--text-gray);
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            border-radius: 8px;
         }
 
         .nav-item.active {
             color: var(--physiogo-blue);
+            background: var(--pink-accent);
         }
 
         .nav-item.active svg {
@@ -420,6 +439,7 @@
 
         .nav-item:hover {
             color: var(--physiogo-blue);
+            background: var(--pink-accent);
         }
 
         .nav-item:hover svg {
@@ -441,14 +461,14 @@
             right: 20px;
             width: 56px;
             height: 56px;
-            background: var(--physiogo-blue);
+            background: linear-gradient(135deg, var(--physiogo-blue) 0%, var(--physiogo-dark) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(6, 25, 163, 0.3);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
             transition: transform 0.3s ease;
             z-index: 99;
         }
@@ -460,10 +480,11 @@
         /* Past Sessions */
         .past-sessions {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 30px rgba(233, 30, 99, 0.15);
+            border: 2px solid var(--pink-accent);
         }
 
         .past-sessions h3 {
@@ -491,10 +512,10 @@
         }
 
         .session-date {
-            background: var(--physiogo-blue);
+            background: linear-gradient(135deg, var(--physiogo-blue) 0%, var(--physiogo-dark) 100%);
             color: white;
             padding: 4px 8px;
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 12px;
         }
 
@@ -513,10 +534,12 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            transition: all 0.3s ease;
         }
 
         .link-btn:hover {
             text-decoration: underline;
+            color: var(--physiogo-dark);
         }
 
         /* Responsive Design */
@@ -550,6 +573,15 @@
 
         .session-card, .timeline, .deposit-card, .past-sessions {
             animation: slideIn 0.5s ease;
+        }
+
+        /* Pink accents and gradients */
+        .session-card:hover,
+        .timeline:hover,
+        .deposit-card:hover,
+        .past-sessions:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(233, 30, 99, 0.2);
         }
     </style>
 </head>
